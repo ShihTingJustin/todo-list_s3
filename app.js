@@ -1,5 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const exphbs = require('express-handlebars')
 
 const app = express()
 const port = 3000
@@ -15,8 +16,11 @@ db.on('error', () => console.log('mongodb error!'))
 db.once('open', () => console.log('mongodb connected!'))
 // 因為 server 只會叫起一次 所以使用 once
 
+app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
+app.set('view engine', 'hbs')
+
 app.get('/', (req, res) => {
-  res.send(`Hello World`)
+  res.render('index')
 })
 
 app.listen(port, () => {
