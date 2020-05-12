@@ -5,6 +5,10 @@
     {{ this.name}}
     <a href="./todos/{{ this._id }}">detail</a>
     <a href="./todos/{{ this._id }}/edit">edit</a>
+    <form action="./todos/{{ this._id}}/delete" method="POST" style="display: inline;">
+      {{!-- form 預設是 block 但 a 是 inline 元素 --}}
+      <button type="submit">delete</button>
+    </form>
   </li>
   {{/each}}
 </ul>

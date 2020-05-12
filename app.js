@@ -29,8 +29,8 @@ app.get('/', (req, res) => {
     .lean()  //撈資料以後想用 res.render，要先用 .lean 來處理
     .then(todos => res.render('index', { todos }))
     .catch(error => console.error(error))
-    //可能網路過程發生error，可以把error捕捉記錄下來
-    // then catch 實作方法稱為 Promise  
+  //可能網路過程發生error，可以把error捕捉記錄下來
+  // then catch 實作方法稱為 Promise  
 })
 
 app.get('/todos/new', (req, res) => {
@@ -80,6 +80,13 @@ app.post('/todos/:id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 
+app.post('/todos/:id/delete', (req, res) => {
+  const id = req.params.id
+  return Todo.findById(id) //先確定 todo 存在
+    .then(todo => todo.remove())
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
+})
 
 app.listen(port, () => {
   console.log(`Express is listening on localhost:${port}`)
