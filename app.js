@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
 const Todo = require('./models/todo')
+const bodyParser = require('body-parser')
 
 const app = express()
 const port = 3000
@@ -20,6 +21,8 @@ db.once('open', () => console.log('mongodb connected!'))
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 
+app.use(bodyParser.urlencoded({ extended: true }))
+
 app.get('/', (req, res) => {
   //拿到全部的 Todo 資料
   Todo.find()
@@ -28,6 +31,24 @@ app.get('/', (req, res) => {
     .catch(error => console.error(error))
     //可能網路過程發生error，可以把error捕捉記錄下來
     // then catch 實作方法稱為 Promise  
+})
+
+app.get('/todos/new', (req, res) => {
+  return res.render('new')
+})
+
+app.post('/todos', (req, res) => {
+  const name = req.body.name
+  // 在 server建立 DB mongoose.model 的實例 然後存檔
+  // 若有其他需求也可以使用這個實例
+  // const todo = new Todo({ name })
+  // return todo.save()
+  //   .then(() => res.redirect('/'))
+  //   .catch(error => console.log(error))
+
+  return Todo.create({ name })
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
 })
 
 app.listen(port, () => {
