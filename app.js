@@ -23,6 +23,7 @@ app.set('view engine', 'hbs')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
+//READ 瀏覽todo
 app.get('/', (req, res) => {
   //拿到全部的 Todo 資料
   Todo.find()
@@ -33,6 +34,7 @@ app.get('/', (req, res) => {
   // then catch 實作方法稱為 Promise  
 })
 
+//CREATE 新增todo
 app.get('/todos/new', (req, res) => {
   return res.render('new')
 })
@@ -51,6 +53,7 @@ app.post('/todos', (req, res) => {
     .catch(error => console.log(error))
 })
 
+//READ 查看單一todo
 app.get('/todos/:id', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
@@ -59,6 +62,7 @@ app.get('/todos/:id', (req, res) => {
     .catch(error => console.log(error))
 })
 
+//UPDATE 更改todo
 app.get('/todos/:id/edit', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
@@ -69,10 +73,16 @@ app.get('/todos/:id/edit', (req, res) => {
 
 app.post('/todos/:id/edit', (req, res) => {
   const id = req.params.id
-  const name = req.body.name
+  const { name, isDone } = req.body
   return Todo.findById(id)
     .then(todo => {
       todo.name = name
+      todo.isDone = isDone === 'on'
+      // if (isDone === 'on') {
+      //   todo.isDone = true
+      // } else {
+      //   todo.isDone = false
+      // }      
       return todo.save()
       // save 是 mongoose 提供的方法
     })
@@ -80,6 +90,7 @@ app.post('/todos/:id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 
+//DELETE 刪除todo
 app.post('/todos/:id/delete', (req, res) => {
   const id = req.params.id
   return Todo.findById(id) //先確定 todo 存在
