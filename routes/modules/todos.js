@@ -9,13 +9,18 @@ router.get('/new', (req, res) => {
 })
 
 router.post('', (req, res) => {
-  const name = req.body.name
+  // 用逗點隔開一次新增多個todo 但單獨打逗點會錯誤 還需要調整
+  const todos = String(req.body.name).split(',').map(todo => ({ name: todo }))
+  return Todo.insertMany(todos)
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
   // 在 server建立 DB mongoose.model 的實例 然後存檔
   // 若有其他需求也可以使用這個實例
   // const todo = new Todo({ name })
   // return todo.save()
   //   .then(() => res.redirect('/'))
   //   .catch(error => console.log(error))
+  const { name } = req.body
   return Todo.create({ name })
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
