@@ -7,7 +7,7 @@ const routes = require('./routes')  //預設會自動找js檔
 require('./config/mongoose')
 
 const app = express()
-const port = process.env.port || 3000
+const PORT = process.env.PORT || 3000
 
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
@@ -16,6 +16,6 @@ app.use(methodOverride('_method')) //API設定時帶上_method就會轉換為HTT
 
 app.use(routes)
 
-app.listen(port, () => {
-  console.log(`Express is listening on localhost:${port}`)
+app.listen(PORT, () => {
+  console.log(`Express is listening on localhost:${PORT}`)
 })
