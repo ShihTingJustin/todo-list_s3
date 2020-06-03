@@ -24,6 +24,15 @@ app.use(methodOverride('_method')) //API設定時帶上_method就會轉換為HTT
 
 usePassport(app)
 
+// middleware let view get arguments
+app.use((req, res, next) => {
+  console.log(req.user)
+  // an express object that can put arguments in response data
+  res.locals.isAuthenticated = req.isAuthenticated()
+  res.locals.user = req.user   // from deserializer
+  next()
+})
+
 app.use(routes)
 
 app.listen(PORT, () => {
