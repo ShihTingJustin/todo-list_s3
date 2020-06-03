@@ -5,8 +5,8 @@ const Todo = require('../../models/todo')
 
 //READ 瀏覽todo
 router.get('/', (req, res) => {
-  //拿到全部的 Todo 資料
-  Todo.find()
+  const userId = req.user._id
+  Todo.find({ userId })
     .lean()  //撈資料以後想用 res.render，要先用 .lean 來處理
     .sort({ _id: 'asc' }) // mongoose的資料排序方法，正序用asc，反序用 desc 
     .then(todos => res.render('index', { todos }))
